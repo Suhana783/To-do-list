@@ -1,51 +1,38 @@
-// client/src/App.jsx
-
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Don't delete this, we'll use it for styles
+import './App.css';
+import AddTodo from './components/AddTodo.jsx';
+import TodoList from './components/TodoList.jsx';
+import CompletedTodos from './components/CompletedTodos.jsx';
+import DeletedTodos from './components/DeletedTodos.jsx';
 
-const API_BASE = "http://localhost:5000"; // Define the base URL of your running backend
+const API_BASE = "http://localhost:5000";
 
 function App() {
-  const [todos, setTodos] = useState([]); // State to hold the fetched To-Dos
+  const [todos, setTodos] = useState([]);
 
-  // useEffect runs once when the component loads
   useEffect(() => {
-    GetTodos();
-  }, []); // Empty array makes it run only on initial load
+    fetchTodos();
+  }, []);
 
-  // Function to fetch all To-Dos from your Node.js backend
-  const GetTodos = () => {
-    fetch(API_BASE + "/todos") // Calls your GET /todos route
+  const fetchTodos = () => {
+    fetch(API_BASE + "/todos")
       .then(res => res.json())
-      .then(data => {
-        console.log("Fetched Data:", data); // Check the console for data
-        setTodos(data); // Store the fetched data in state
-      })
+      .then(data => setTodos(data))
       .catch(err => console.error("Error fetching todos: ", err));
   };
-  
-  // A simple function to render the Todo items
-  const renderTodos = () => {
-    if (!todos || todos.length === 0) {
-      return <h2>No tasks yet.</h2>;
-    }
-    return todos.map(todo => (
-      <div className={"todo" + (todo.completed ? " is-complete" : "")} key={todo._id}>
-        <div className="checkbox"></div>
-        <div className="text">{todo.text}</div>
-        <div className="delete-todo">x</div>
-      </div>
-    ));
+
+  const handleAdd = (newTodo) => {
+    setTodos(prev => [...prev, newTodo]);
   };
-  
+
   return (
     <div className="App">
-      <h1>Welcome Ahana</h1>
-      <h4>Your Tasks</h4>
-
-      <div className="todos">
-        {renderTodos()}
-      </div>
+      <h1>Your Tasks</h1>
+      <AddTodo onAdd={handleAdd} />
+      <TodoList todos={todos} onUpdate={fetchTodos} />
+      <CompletedTodos />
+      <DeletedTodos />
+      <h2>Bye see you later</h2>
     </div>
   );
 }

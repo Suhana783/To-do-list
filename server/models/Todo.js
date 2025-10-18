@@ -13,9 +13,19 @@ const TodoSchema = new Schema({
         type: Boolean,
         default: false // Default state is incomplete
     },
+    completedAt: {
+        type: Date
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date
+    },
     timestamp: {
-        type: String,
-        default: Date.now() // Records when the task was created
+        type: Date,
+        default: Date.now
     }
 });
 
