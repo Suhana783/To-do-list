@@ -1,100 +1,200 @@
+/* client/src/App.css - New Styling for Tabbed Layout */
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  background-color: #f4f7f6; /* Light background for the whole page */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .App {
-  text-align: center;
-  font-family: 'Montserrat', Arial, sans-serif;
-  margin-top: 60px;
+  width: 100%;
+  max-width: 600px;
 }
 
-h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+.todo-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 0;
 }
 
-form {
-  margin-bottom: 30px;
+/* --- Header Styling --- */
+.header-box {
+  padding: 20px 30px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eee;
 }
 
-input[type="text"] {
-  padding: 8px;
+.main-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 5px 0;
+  text-align: left;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+/* --- Add Task Area Styling --- */
+.add-task-area form {
+  display: flex;
+  margin-bottom: 0; /* Remove default form margin */
+}
+
+.add-task-area input[type="text"] {
+  flex-grow: 1;
+  padding: 10px 15px;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 6px 0 0 6px;
   border: 1px solid #ccc;
+  border-right: none;
+  width: auto;
 }
 
-button {
-  padding: 8px 16px;
+.add-task-area button {
+  padding: 10px 20px;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 0 6px 6px 0;
   border: none;
-  background: #222e50;
+  background: #1e88e5; /* Darker blue for prominence */
   color: #fff;
-  margin-left: 8px;
   cursor: pointer;
+  transition: background 0.3s;
+  margin-left: 0;
 }
 
+.add-task-area button:hover {
+  background: #1565c0;
+}
+
+/* --- Tab Navigation Styling --- */
+.tab-navigation {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 15px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: #555;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-btn:hover {
+  color: #1e88e5;
+}
+
+.tab-btn.active {
+  color: #1e88e5;
+  border-bottom: 3px solid #1e88e5;
+}
+
+/* --- Main View & List Styling --- */
+.main-view {
+  padding: 20px 30px;
+  min-height: 250px; /* Ensure content area is visible */
+}
+
+/* Base style for individual todo item */
 .todo {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 10px 0;
+  justify-content: space-between;
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.todo:last-child {
+    border-bottom: none;
+}
+
+/* Todo text and checkbox alignment */
+.todo .checkbox-and-text {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .checkbox {
-  margin-right: 10px;
-  font-size: 1.2rem;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  font-size: 1.1rem;
+  color: transparent; /* Hide checkmark by default */
+}
+
+.is-complete .checkbox {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  color: white; /* Show checkmark when complete */
+}
+
+.is-complete .text {
+  text-decoration: line-through;
+  color: #999;
 }
 
 .text {
-  flex: 1;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
 }
 
 .delete-todo {
-  margin-left: 10px;
   color: #e63946;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 5px;
+  transition: color 0.3s;
+}
+
+.delete-todo:hover {
+    color: #c90000;
+}
+
+/* Completed and Deleted List styling (now within main-view) */
+.main-view ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.main-view ul li {
+  padding: 10px 0;
+  font-size: 1rem;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: left;
+}
+
+.main-view ul li:last-child {
+    border-bottom: none;
+}
+
+.no-tasks-message {
+    text-align: center;
+    color: #888;
+    padding: 50px 0;
 }
