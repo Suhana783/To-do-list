@@ -7,7 +7,6 @@ import DeletedTodos from './components/DeletedTodos.jsx';
 
 const API_BASE = "http://localhost:5000";
 
-// Define the views available for the tabs
 const VIEWS = {
     ACTIVE: 'active',
     COMPLETED: 'completed',
@@ -17,39 +16,55 @@ const VIEWS = {
 function App() {
   const [todos, setTodos] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(0); 
-  // NEW STATE: Manages which tab is currently visible
   const [currentView, setCurrentView] = useState(VIEWS.ACTIVE); 
+  
+  const [activeCount, setActiveCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [deletedCount, setDeletedCount] = useState(0);
 
   useEffect(() => {
     fetchTodos();
+    fetchCounts();
   }, []);
+
+  const fetchCounts = async () => {
+    try {
+      const activeRes = await fetch(API_BASE + "/todos");
+      const activeData = await activeRes.json();
+      setActiveCount(activeData.length);
+
+      const completedRes = await fetch(API_BASE + "/todos/completed");
+      const completedData = await completedRes.json();
+      setCompletedCount(completedData.length);
+
+      const deletedRes = await fetch(API_BASE + "/todos/deleted");
+      const deletedData = await deletedRes.json();
+      setDeletedCount(deletedData.length);
+    } catch (err) {
+      console.error("Error fetching counts: ", err);
+    }
+  };
 
   const fetchTodos = () => {
     fetch(API_BASE + "/todos")
       .then(res => res.json())
       .then(data => setTodos(data))
       .catch(err => console.error("Error fetching todos: ", err));
-    
-    // Increment the trigger to force refresh of Completed/Deleted views
+
     setUpdateTrigger(prev => prev + 1); 
+    fetchCounts();
   };
 
   const handleAdd = (newTodo) => {
     setTodos(prev => [...prev, newTodo]);
     setUpdateTrigger(prev => prev + 1); 
+    fetchCounts();
   };
   
-  // Calculate counts for the tabs
-  const activeCount = todos.length;
-  // NOTE: Completed/Deleted counts will require separate fetches or better state management,
-  // but for now, we'll rely on the forced re-render mechanism for the other tabs.
-  // We'll use a placeholder/separate logic for the count display in the final step.
-
   return (
     <div className="App">
       <div className="todo-container">
         
-        {/* HEADER AREA */}
         <header className="header-box">
           <h1 className="main-title">My Tasks</h1>
           <p className="subtitle">Organize your daily tasks efficiently</p>
@@ -58,7 +73,6 @@ function App() {
           </div>
         </header>
 
-        {/* TAB NAVIGATION */}
         <div className="tab-navigation">
           <button 
             className={`tab-btn ${currentView === VIEWS.ACTIVE ? 'active' : ''}`}
@@ -70,32 +84,28 @@ function App() {
             className={`tab-btn ${currentView === VIEWS.COMPLETED ? 'active' : ''}`}
             onClick={() => setCurrentView(VIEWS.COMPLETED)}
           >
-            Completed (0) {/* Placeholders - update these in a later step if you fetch counts */}
+            Completed ({completedCount})
           </button>
           <button 
             className={`tab-btn ${currentView === VIEWS.DELETED ? 'active' : ''}`}
             onClick={() => setCurrentView(VIEWS.DELETED)}
           >
-            Deleted (0) {/* Placeholders - update these in a later step if you fetch counts */}
+            Deleted ({deletedCount})
           </button>
         </div>
 
-        {/* MAIN VIEW AREA (Conditional Rendering) */}
         <div className="main-view">
           {currentView === VIEWS.ACTIVE && (
             <TodoList todos={todos} onUpdate={fetchTodos} />
           )}
 
           {currentView === VIEWS.COMPLETED && (
-            <CompletedTodos key={`completed-${updateTrigger}`} />
+            <CompletedTodos key={`completed-${updateTrigger}`} onUpdate={fetchTodos} />
           )}
 
           {currentView === VIEWS.DELETED && (
-            <DeletedTodos key={`deleted-${updateTrigger}`} />
+            <DeletedTodos key={`deleted-${updateTrigger}`} onUpdate={fetchTodos} />
           )}
-          
-          {/* Your custom message removed for the clean UI */}
-          {/* <h2>Bye see you later</h2> */}
         </div>
 
       </div>

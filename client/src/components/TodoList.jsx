@@ -22,27 +22,31 @@ function TodoList({ todos, onUpdate }) {
   };
 
   if (!todos || todos.length === 0) {
-    return <h2>No tasks yet.</h2>;
+    return <p className="no-tasks-message">No active tasks. Add one to get started!</p>;
   }
 
   return (
     <div>
       {todos.map(todo => (
         <div className={"todo" + (todo.completed ? " is-complete" : "")} key={todo._id}>
-          <div
-            className="checkbox"
-            onClick={() => completeTodo(todo._id)}
-            style={{ cursor: 'pointer' }}
-          >
-            {todo.completed ? "✔" : "⬜"}
+          
+          <div className="checkbox-and-text">
+            <div
+              className="checkbox"
+              onClick={() => completeTodo(todo._id)}
+              style={{ cursor: 'pointer' }}
+            >
+              ✔
+            </div>
+            <div className="text">{todo.text}</div>
           </div>
-          <div className="text">{todo.text}</div>
+          
           <div
             className="delete-todo"
             onClick={() => deleteTodo(todo._id)}
-            style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+            style={{ cursor: 'pointer' }}
           >
-            x
+            🗑️
           </div>
         </div>
       ))}
