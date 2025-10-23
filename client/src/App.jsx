@@ -63,7 +63,8 @@ function App() {
   
   return (
     
-    
+    <>
+    <div id="heading1">Task Manager</div>
     <div className="App">
       <div className="todo-container">
         <header className="header-box">
@@ -110,6 +111,7 @@ function App() {
 
       </div>
     </div>
+    </>
   );
 }
 

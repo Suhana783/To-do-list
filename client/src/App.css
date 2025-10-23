@@ -1,21 +1,39 @@
 /* client/src/App.css */
 
-/* --- GLOBAL BODY/HTML RESET FOR FULL VIEWPORT CENTERING --- */
+/* --- BOX SIZING FIX: Eliminates scrollbar by making padding/border included in element's total size --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 #root {
   display: flex;
-  justify-content: center; /* GUARANTEED CENTER HORIZONTALLY */
-  align-items: center; /* GUARANTEED CENTER VERTICALLY */
-  width: 100%; /* Ensure #root takes full width */
+  flex-direction: column; 
+  justify-content: flex-start; 
+  align-items: center;
+  width: 100%; 
+  background: linear-gradient(to right, #1e88e5, #4CAF50);
   min-height: 100vh;
-  padding: 2rem;
-  background-color: #f4f7f6;
+  padding-top: 50px; 
+  padding-bottom: 50px; 
+  padding-left: 2rem; 
+  padding-right: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#heading1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #09090a;
+  margin-bottom: 30px; 
+  text-align: center;
+  width: 100%;
+  max-width: 650px; 
 }
 
 .App {
@@ -31,7 +49,6 @@ html, body {
   padding: 0;
 }
 
-/* --- Header and Heading Styling --- */
 .header-box {
   padding: 25px 30px;
   background-color: #fcfcfc;
@@ -41,14 +58,14 @@ html, body {
 .main-title {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #333;
+  color: #4acc3c;
   margin: 0 0 5px 0;
   text-align: left;
 }
 
 .subtitle {
   font-size: 0.9rem;
-  color: #777;
+  color: #b30314;
   margin: 0 0 20px 0;
   text-align: left;
 }
@@ -74,7 +91,7 @@ html, body {
   font-size: 1rem;
   border-radius: 6px;
   border: none;
-  background: #1e88e5;
+  background: linear-gradient(to right, #FFC69D, #E06B80);
   color: #fff;
   cursor: pointer;
   transition: background 0.3s;
@@ -82,10 +99,10 @@ html, body {
 }
 
 .add-task-area button:hover {
-  background: #1565c0;
+  background: linear-gradient(to right, #eaab7d, #be1635);
+  border: 1px solid rgb(241, 19, 241);
 }
 
-/* --- Tab Navigation Styling --- */
 .tab-navigation {
   display: flex;
   border-bottom: 1px solid #eee;
@@ -98,27 +115,25 @@ html, body {
   font-weight: 600;
   border: none;
   background: transparent;
-  color: #555;
+  color: #4b4747;
   cursor: pointer;
   border-bottom: 3px solid transparent;
   transition: all 0.3s;
 }
 
 .tab-btn:hover {
-  color: #1e88e5;
+  color: #9B5DE0;
 }
 
 .tab-btn.active {
-  color: #1e88e5;
-  border-bottom: 3px solid #1e88e5;
+  color: #9B5DE0;
+  border-bottom: 3px solid #9B5DE0;
 }
 
 .main-view {
   padding: 20px 30px;
   min-height: 400px; 
 }
-
-/* --- List Item Styling (All Tabs) --- */
 
 .todo {
   display: flex;
