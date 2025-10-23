@@ -62,12 +62,12 @@ function App() {
   };
   
   return (
+    
+    
     <div className="App">
       <div className="todo-container">
-        
         <header className="header-box">
-          <h1 className="main-title">My Tasks</h1>
-          <p className="subtitle">Organize your daily tasks efficiently</p>
+          <p className="subtitle">Manage your task</p> 
           <div className="add-task-area">
             <AddTodo onAdd={handleAdd} />
           </div>

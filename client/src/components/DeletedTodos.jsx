@@ -32,11 +32,17 @@ function DeletedTodos({ onUpdate }) {
     }
   };
   
-  const hardDeleteTodo = async (id) => {
+  const clearAllDeleted = async () => {
+    if (!window.confirm("Are you sure you want to permanently delete ALL archived tasks? This action cannot be undone.")) {
+        return; 
+    }
     try {
-        console.log(`Attempted hard delete for ID: ${id}. Requires server endpoint.`);
+        await fetch(`${API_BASE}/todos/clear-deleted`, { method: 'DELETE' });
+        
+        fetchDeletedTodos();
+        if (onUpdate) onUpdate();
     } catch (err) {
-      console.error("Error permanently deleting todo:", err);
+        console.error("Error clearing all deleted tasks:", err);
     }
   };
 
@@ -45,27 +51,31 @@ function DeletedTodos({ onUpdate }) {
       {deletedTodos.length === 0 ? (
         <p className="no-tasks-message">No deleted tasks.</p>
       ) : (
-        <ul>
-          {deletedTodos.map(todo => (
-            <li className="list-item-with-actions" key={todo._id}>
-                <span className="list-item-text">{todo.text}</span>
-                <div className="list-item-actions">
-                    <button 
-                        className="action-btn restore-btn"
-                        onClick={() => restoreTodo(todo._id)}
-                    >
-                        ↩️
-                    </button>
-                    <button 
-                        className="action-btn hard-delete-btn"
-                        onClick={() => hardDeleteTodo(todo._id)}
-                    >
-                        ❌
-                    </button>
-                </div>
-            </li>
-          ))}
-        </ul>
+        <>
+            <div className="list-actions-bar">
+                <button 
+                    className="clear-all-btn action-btn" 
+                    onClick={clearAllDeleted}
+                >
+                    Clear All ({deletedTodos.length})
+                </button>
+            </div>
+            <ul>
+            {deletedTodos.map(todo => (
+                <li className="list-item-with-actions deleted-item" key={todo._id}>
+                    <span className="list-item-text">{todo.text}</span>
+                    <div className="list-item-actions">
+                        <button 
+                            className="action-btn restore-btn"
+                            onClick={() => restoreTodo(todo._id)}
+                        >
+                            ↩️
+                        </button>
+                    </div>
+                </li>
+            ))}
+            </ul>
+        </>
       )}
     </div>
   );

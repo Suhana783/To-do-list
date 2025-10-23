@@ -1,23 +1,17 @@
 // server/server.js
 
-// 1. Load environment variables (MUST be the first line to load .env data)
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Todo = require('./models/Todo');
 
-const app = express(); // <--- CRITICAL: 'app' is defined here
+const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 2. Middleware setup
 app.use(cors()); 
 app.use(express.json()); 
 
-
-// ------------------------------------------------------------------
-// Database Connection
-// ------------------------------------------------------------------
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
@@ -29,14 +23,10 @@ mongoose.connect(process.env.MONGO_URI)
 });
 
 
-// ------------------------------------------------------------------
-// CRUD API ROUTES
-// ------------------------------------------------------------------
-
 // 1. READ (GET All ACTIVE Todos)
 app.get('/todos', async (req, res) => {
   try {
-    const todos = await Todo.find({ deleted: false }).sort({ timestamp: -1 });
+    const todos = await Todo.find({ deleted: false, completed: false }).sort({ timestamp: -1 });
     res.json(todos);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -92,7 +82,7 @@ app.put('/todos/complete/:id', async (req, res) => {
   }
 });
 
-// 6. DELETE -> soft delete (mark deleted)
+// 6. DELETE (Soft Delete)
 app.delete('/todos/delete/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
@@ -107,17 +97,26 @@ app.delete('/todos/delete/:id', async (req, res) => {
   }
 });
 
-// 7. UPDATE (PUT/Restore a Todo) - RESTORE ENDPOINT
+// 7. UPDATE (PUT/Restore a Todo)
 app.put('/todos/restore/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (!todo) return res.status(404).json({ message: 'Todo not found' });
 
-    // Set deleted to false and clear deletedAt
     todo.deleted = false;
     todo.deletedAt = null;
     await todo.save();
     res.json(todo);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 8. DELETE /todos/clear-deleted: Permanently remove all soft-deleted tasks
+app.delete('/todos/clear-deleted', async (req, res) => {
+  try {
+    const result = await Todo.deleteMany({ deleted: true });
+    res.json({ message: `${result.deletedCount} deleted tasks permanently removed.` });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
