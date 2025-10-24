@@ -9,7 +9,26 @@ const Todo = require('./models/Todo');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors()); 
+// CRITICAL FIX: CORS Configuration for Netlify Deployment
+const allowedOrigins = ['https://to-do-listsuhana783.netlify.app']; // Use your exact Netlify domain
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        // or allow the specific Netlify domain
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'), false);
+        }
+    },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204
+};
+
+// 2. Middleware setup: APPLY the custom options
+app.use(cors(corsOptions)); 
 app.use(express.json()); 
 
 
