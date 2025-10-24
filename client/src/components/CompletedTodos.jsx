@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const API_BASE = "https://my-task-manager-api.onrender.com";
+const API_BASE = "https://to-do-list-6k56.onrender.com";
 
 function CompletedTodos({ onUpdate }) {
   const [completedTodos, setCompletedTodos] = useState([]);

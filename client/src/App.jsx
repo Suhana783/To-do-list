@@ -5,7 +5,7 @@ import TodoList from './components/TodoList.jsx';
 import CompletedTodos from './components/CompletedTodos.jsx';
 import DeletedTodos from './components/DeletedTodos.jsx';
 
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://to-do-list-6k56.onrender.com";
 
 const VIEWS = {
     ACTIVE: 'active',
